@@ -11,15 +11,14 @@ interface ApiInterface {
     @GET("top-headlines")
     fun getNews(
         @Query("country") country: String,
-        @Query("apiKey") apiKey : String
+        @Query("apiKey") apiKey: String
     ): Call<News>
 
-  /*  @GET("everything")
+    @GET("everything")
     fun getNewsSearch(
-        @Query("q") keyword : String,
-        @Query("language") language : String,
-        @Query("sortBy") sortBy : String,
-        @Query("apiKey") apiKey : String
-    ) : Call<News>
-*/
+        @Query("q") keyword: String,
+        @Query("language") language: String,
+        @Query("sortBy") sortBy: String,
+        @Query("apiKey") apiKey: String
+    ): Call<News>
 }

@@ -7,7 +7,7 @@ class News {
 
     @SerializedName("status")
     @Expose
-    var status:String? = null
+    var status: String? = null
 
     @SerializedName("totalResult")
     @Expose
@@ -15,6 +15,6 @@ class News {
 
     @SerializedName("articles")
     @Expose
-    var article : List<Article>? = null
+    var article: List<Article>? = null
 
 }

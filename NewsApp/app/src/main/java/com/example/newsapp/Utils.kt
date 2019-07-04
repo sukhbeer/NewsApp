@@ -9,7 +9,8 @@ import java.util.*
 
 class Utils {
 
-    private var colorList = arrayOf(ColorDrawable(Color.parseColor("#ffeead")),
+    private var colorList = arrayOf(
+        ColorDrawable(Color.parseColor("#ffeead")),
         ColorDrawable(Color.parseColor("#93cfb3")),
         ColorDrawable(Color.parseColor("#fd7a7a")),
         ColorDrawable(Color.parseColor("#faca5f")),
@@ -19,30 +20,30 @@ class Utils {
         ColorDrawable(Color.parseColor("#d93947"))
     )
 
-     fun getRandomColor() : ColorDrawable{
+    fun getRandomColor(): ColorDrawable {
         val idx = Random().nextInt(colorList.size)
         return colorList[idx]
     }
 
-    fun dateToTime(oldDate : String) : String? {
+    fun dateToTime(oldDate: String): String? {
         val p = PrettyTime(Locale(getCountry()))
-        var isTime: String?
+        val isTime: String?
 
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.ENGLISH)
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH)
         val date = sdf.parse(oldDate)
         isTime = p.format(date)
 
         return isTime
     }
 
-    fun DateFormat(oldDate : String) : String?{
-        var newDate: String?
+    fun dateFormat(oldDate: String): String? {
+        val newDate: String?
         val dateFormat = SimpleDateFormat("E, d MMM yyyy", Locale(getCountry()))
 
         newDate = try {
-            val date : Date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH).parse(oldDate)
+            val date: Date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH).parse(oldDate)
             dateFormat.format(date)
-        }catch (e : ParseException){
+        } catch (e: ParseException) {
             oldDate
         }
 
@@ -50,9 +51,15 @@ class Utils {
         return newDate
     }
 
-     fun getCountry() : String{
+    fun getCountry(): String {
         val local = Locale.getDefault()
         return local.country
+    }
+
+    fun getLanguage(): String {
+        val locale: Locale = Locale.getDefault()
+        val country: String = locale.language
+        return country.toLowerCase()
     }
 
 }

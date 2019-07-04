@@ -19,15 +19,15 @@ class Article {
 
     @SerializedName("url")
     @Expose
-    var url : String? = null
+    var url: String? = null
 
     @SerializedName("urlToImage")
     @Expose
-    var urlToImage : String? = null
+    var urlToImage: String? = null
 
     @SerializedName("publishedAt")
     @Expose
-    var publishAt : String? = null
+    var publishAt: String? = null
 
     @SerializedName("source")
     @Expose

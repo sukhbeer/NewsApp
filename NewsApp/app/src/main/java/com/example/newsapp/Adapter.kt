@@ -21,20 +21,20 @@ import com.bumptech.glide.request.target.Target
 import com.example.newsapp.model.Article
 import kotlinx.android.synthetic.main.item_layout.view.*
 
-class Adapter(private val context: Context, private val list : ArrayList<Article>):
+class Adapter(private val context: Context, private val list: ArrayList<Article>) :
     RecyclerView.Adapter<Adapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout,parent,false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false))
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult", "SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val model : Article = list[position]
+        val model: Article = list[position]
         val utils = Utils()
 
         val requestOptions = RequestOptions()
@@ -47,7 +47,7 @@ class Adapter(private val context: Context, private val list : ArrayList<Article
         Glide.with(context)
             .load(model.urlToImage)
             .apply(requestOptions)
-            .listener(object : RequestListener<Drawable>{
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -55,7 +55,7 @@ class Adapter(private val context: Context, private val list : ArrayList<Article
                     isFirstResource: Boolean
                 ): Boolean {
                     holder.progressBar.visibility = View.GONE
-                   return false
+                    return false
                 }
 
                 override fun onResourceReady(
@@ -74,21 +74,21 @@ class Adapter(private val context: Context, private val list : ArrayList<Article
         holder.title.text = model.title
         holder.desc.text = model.description
         holder.source.text = model.source?.name
-        holder.author.text =model.author
-        holder.time.text = "\u2022 " + model.publishAt?.let { utils.DateFormat(it) }
-        holder.publishedAt.text = utils.DateFormat(model.publishAt.toString())
+        holder.author.text = model.author
+        holder.time.text = "\u2022 " + model.publishAt?.let { utils.dateFormat(it) }
+        holder.publishedAt.text = utils.dateFormat(model.publishAt.toString())
     }
 
-    class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val title : TextView = view.title
-        val desc : TextView = view.desc
-        val author : TextView = view.author
-        val publishedAt : TextView = view.publishedAt
-        val source : TextView = view.source
-        val time : TextView = view.time
-        val imageView : ImageView = view.img
-        val progressBar : ProgressBar = view.prograss_load_photo
+        val title: TextView = view.title
+        val desc: TextView = view.desc
+        val author: TextView = view.author
+        val publishedAt: TextView = view.publishedAt
+        val source: TextView = view.source
+        val time: TextView = view.time
+        val imageView: ImageView = view.img
+        val progressBar: ProgressBar = view.prograss_load_photo
 
     }
 }

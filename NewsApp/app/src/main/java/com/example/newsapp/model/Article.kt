@@ -29,4 +29,7 @@ class Article {
     @Expose
     var publishAt : String? = null
 
+    @SerializedName("source")
+    @Expose
+    var source: Source? = null
 }

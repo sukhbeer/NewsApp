@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -77,6 +78,9 @@ class Adapter(private val context: Context, private val list: ArrayList<Article>
         holder.author.text = model.author
         holder.time.text = "\u2022 " + model.publishAt?.let { utils.dateFormat(it) }
         holder.publishedAt.text = utils.dateFormat(model.publishAt.toString())
+        holder.itemView.setOnClickListener {
+            Toast.makeText(context,"Item Clicked",Toast.LENGTH_SHORT).show()
+        }
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

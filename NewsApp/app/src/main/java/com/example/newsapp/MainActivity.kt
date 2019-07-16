@@ -49,8 +49,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun loadJson(keyword: String) {
-
-        headlines.visibility = View.INVISIBLE
         swipeRefresh.isRefreshing = true
 
         val apiInterface: ApiInterface? = ApiClient.getApiClient?.create(ApiInterface::class.java)
@@ -88,11 +86,12 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
                     headlines.visibility = View.VISIBLE
                     swipeRefresh.isRefreshing = false
+
                 }
             }
-
         })
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 

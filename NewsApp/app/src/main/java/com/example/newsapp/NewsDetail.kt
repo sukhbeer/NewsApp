@@ -1,5 +1,6 @@
 package com.example.newsapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -10,21 +11,63 @@ import android.support.design.widget.AppBarLayout
 import android.view.View
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlin.math.abs
 
-abstract class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener{
+class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener{
 
-    private val mUrl : String? = null
+    private var mUrl  : String? = null
+    private var mImg : String? = null
+    private var mTitle : String? = null
+    private var mDate : String? = null
+    private var mSource : String? = null
+    private var mAuthor : String? = null
     private var isHideToolbarView : Boolean = false
-    abstract val titleAppbar : LinearLayout
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_detail)
+
+        val i : Intent = intent
+        mUrl = i.getStringExtra("url")
+        mImg = i.getStringExtra("img")
+        mTitle = i.getStringExtra("title")
+        mDate = i.getStringExtra("date")
+        mSource = i.getStringExtra("source")
+        mAuthor = i.getStringExtra("authoe")
+
+        val  utils = Utils()
+        val requestOptions = RequestOptions()
+        requestOptions.error(utils.getRandomColor())
+
+        Glide.with(this)
+            .load(mImg)
+            .apply(requestOptions)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(backdrop)
+
+        title_on_appbar.text = mSource
+        subtitle_on_appbar.text = mUrl
+        date.text = mDate
+
+        var author : String? = null
+
+        author = if(mAuthor != null){
+            "\u2022" + mAuthor
+        }else{
+            ""
+        }
+
+        time.text = mSource+author+"\u2022"+ utils.dateFormat(mDate.toString())
+
+        inWebView(mUrl.toString())
     }
 
-    fun inWebView(url : String){
+    private fun inWebView(url : String){
         webView.settings.loadsImagesAutomatically = true
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
@@ -44,8 +87,6 @@ abstract class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
         onBackPressed()
         return true
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu,menu)
@@ -72,12 +113,11 @@ abstract class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
 
         if(percentage == 1f && isHideToolbarView){
             date_behavior.visibility = View.GONE
-            titleAppbar.visibility = View.VISIBLE
             isHideToolbarView = !isHideToolbarView
         }
         else if (percentage < 1f && !isHideToolbarView){
             date_behavior.visibility = View.VISIBLE
-            titleAppbar.visibility = View.GONE
+          //  titleAppbar.visibility = View.GONE
             isHideToolbarView = !isHideToolbarView
         }
     }

@@ -2,6 +2,7 @@ package com.example.newsapp
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -79,7 +80,15 @@ class Adapter(private val context: Context, private val list: ArrayList<Article>
         holder.time.text = "\u2022 " + model.publishAt?.let { utils.dateFormat(it) }
         holder.publishedAt.text = utils.dateFormat(model.publishAt.toString())
         holder.itemView.setOnClickListener {
-            Toast.makeText(context,"Item Clicked",Toast.LENGTH_SHORT).show()
+            val intent = Intent(context,NewsDetail::class.java)
+
+            intent.putExtra("url",model.url)
+            intent.putExtra("title",model.title)
+            intent.putExtra("img",model.urlToImage)
+            intent.putExtra("date",model.source?.name)
+            intent.putExtra("author",model.author)
+
+            context.startActivity(intent)
         }
     }
 

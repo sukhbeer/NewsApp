@@ -1,9 +1,13 @@
 package com.example.newsapp
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -25,12 +28,23 @@ import kotlinx.android.synthetic.main.item_layout.view.*
 
 class Adapter(private val context: Context, private val list: ArrayList<Article>) :
     RecyclerView.Adapter<Adapter.ViewHolder>() {
+
+    private var onItemClickListener: OnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false))
+        val view: View = LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view, onItemClickListener)
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View?, position: Int) {
+
+        }
     }
 
     @SuppressLint("CheckResult", "SetTextI18n")
@@ -79,20 +93,28 @@ class Adapter(private val context: Context, private val list: ArrayList<Article>
         holder.author.text = model.author
         holder.time.text = "\u2022 " + model.publishAt?.let { utils.dateFormat(it) }
         holder.publishedAt.text = utils.dateFormat(model.publishAt.toString())
-        holder.itemView.setOnClickListener {
-            val intent = Intent(context,NewsDetail::class.java)
+         holder.itemView.setOnClickListener {
+             val intent = Intent(context, NewsDetail::class.java)
 
-            intent.putExtra("url",model.url)
-            intent.putExtra("title",model.title)
-            intent.putExtra("img",model.urlToImage)
-            intent.putExtra("date",model.source?.name)
-            intent.putExtra("author",model.author)
+             intent.putExtra("url", model.url)
+             intent.putExtra("title", model.title)
+             intent.putExtra("img", model.urlToImage)
+             intent.putExtra("date",model.publishAt)
+             intent.putExtra("source", model.source?.name)
+             intent.putExtra("author", model.author)
 
-            context.startActivity(intent)
-        }
+             val pair : Pair<View,String> = Pair(holder.imageView,ViewCompat.getTransitionName(holder.imageView))
+             val optionsCompat : ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                 context as Activity, pair
+             )
+
+             context.startActivity(intent,optionsCompat.toBundle())
+         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, onItemClickListener: OnItemClickListener?) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
+
 
         val title: TextView = view.title
         val desc: TextView = view.desc
@@ -103,5 +125,15 @@ class Adapter(private val context: Context, private val list: ArrayList<Article>
         val imageView: ImageView = view.img
         val progressBar: ProgressBar = view.prograss_load_photo
 
+        private val onItemClickListeners = onItemClickListener
+
+        override fun onClick(v: View?) {
+            onItemClickListeners?.onItemClick(v, adapterPosition)
+        }
+
+
     }
+
 }
+
+

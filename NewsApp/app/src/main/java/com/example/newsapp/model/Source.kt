@@ -11,6 +11,6 @@ class Source {
 
     @SerializedName("name")
     @Expose
-    var name: String? =null
+    var name: String? = null
 
 }

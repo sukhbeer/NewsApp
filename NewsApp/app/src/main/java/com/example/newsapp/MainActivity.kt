@@ -1,9 +1,14 @@
 package com.example.newsapp
 
+import android.app.ActivityOptions
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
+import android.support.v4.view.ViewCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -13,12 +18,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.support.v7.widget.SearchView
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.newsapp.Networking.ApiClient
 import com.example.newsapp.Networking.ApiInterface
 import com.example.newsapp.model.Article
 import com.example.newsapp.model.News
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_layout.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +34,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private val apiKey: String = "485ea4701ad8431cb56fe3b4d587c745"
-    var article: ArrayList<Article> = ArrayList()
+    var articles: ArrayList<Article> = ArrayList()
 
     private lateinit var adapter: Adapter
     private lateinit var viewManger: RecyclerView.LayoutManager
@@ -45,6 +53,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.isNestedScrollingEnabled = false
 
         onLoadRefresh("")
+
 
     }
 
@@ -76,13 +85,16 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onResponse(call: Call<News>?, response: Response<News>?) {
                 if (response!!.isSuccessful && response.body().article != null) {
-                    if (article.isNotEmpty()) {
+                    if (articles.isNotEmpty()) {
                     }
 
-                    article = (response.body().article as ArrayList<Article>?)!!
-                    adapter = Adapter(this@MainActivity, article)
+                    articles = (response.body().article as ArrayList<Article>?)!!
+                    adapter = Adapter(this@MainActivity, articles)
                     recyclerView.adapter = adapter
                     adapter.notifyDataSetChanged()
+
+
+
 
                     headlines.visibility = View.VISIBLE
                     swipeRefresh.isRefreshing = false
@@ -91,6 +103,32 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
     }
+
+    /*fun initListener() {
+        adapter.setOnItemClickListener(object : Adapter.OnItemClickListener {
+            override fun onItemClick(view: View?, position: Int) {
+                super.onItemClick(view, position)
+
+                val intent = Intent(this@MainActivity,NewsDetail::class.java)
+
+                val article: Article = articles[position]
+                intent.putExtra("url",article.url)
+                intent.putExtra("title",article.title)
+                intent.putExtra("img",article.urlToImage)
+                intent.putExtra("date",article.publishAt)
+                intent.putExtra("source",article.source?.name)
+                intent.putExtra("author",article.author)
+
+
+                val pair: Pair<View,String> = Pair(img,ViewCompat.getTransitionName(img))
+                val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,pair)
+
+                startActivity(intent,optionsCompat.toBundle())
+
+            }
+        })
+
+    }*/
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -128,7 +166,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         loadJson("")
     }
 
-    private fun onLoadRefresh(keyword: String){
+    private fun onLoadRefresh(keyword: String) {
         swipeRefresh.post {
             Runnable {
                 loadJson(keyword)

@@ -23,6 +23,8 @@ class Utils {
     fun getRandomColor(): ColorDrawable {
         val idx = Random().nextInt(colorList.size)
         return colorList[idx]
+
+
     }
 
     fun dateToTime(oldDate: String): String? {
@@ -61,5 +63,7 @@ class Utils {
         val country: String = locale.language
         return country.toLowerCase()
     }
+
+
 
 }

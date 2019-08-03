@@ -93,9 +93,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     recyclerView.adapter = adapter
                     adapter.notifyDataSetChanged()
 
-
-
-
                     headlines.visibility = View.VISIBLE
                     swipeRefresh.isRefreshing = false
 
@@ -142,6 +139,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         searchView.setSearchableInfo(searchManger.getSearchableInfo(componentName))
         searchView.queryHint = "Search News..."
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query?.length!! > 2) {
                     loadJson(query)

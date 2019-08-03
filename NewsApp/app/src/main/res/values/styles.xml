@@ -9,7 +9,6 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-
     <style name="AppTheme.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -18,5 +17,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+
+    <style name="MyAppBarLayoutTheme"
+           parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
 
 </resources>

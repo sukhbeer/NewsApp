@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
 import android.view.View
 import android.webkit.WebViewClient
 import com.bumptech.glide.Glide
@@ -33,9 +32,7 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
         setContentView(R.layout.activity_news_detail)
 
 
-
-        //collapsing_toolbar.title = ""
-
+        collapsing_toolbar.title = ""
 
 
         val i: Intent = intent
@@ -54,13 +51,13 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             .load(mImg)
             .apply(requestOptions)
             .transition(DrawableTransitionOptions.withCrossFade())
-         //   .into(backdrop)
+            .into(backdrop)
 
-    //    title_on_appbar.text = mSource
-      //  subtitle_on_appbar.text = mUrl
-       // date.text = mDate
+        title_on_appbar.text = mSource
+        subtitle_on_appbar.text = mUrl
+        date.text = mDate
 
-        var author: String? = null
+        val author: String?
 
         author = if (mAuthor != null) {
             "\u2022" + mAuthor
@@ -68,11 +65,12 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             ""
         }
 
-    //    time.text = mSource + author + "\u2022" + utils.dateFormat(mDate.toString())
+        time.text = mSource + author + "\u2022" + utils.dateFormat(mDate.toString())
 
-  //      inWebView(mUrl.toString())
+        inWebView(mUrl.toString())
     }
-/*
+
+    @SuppressLint("SetJavaScriptEnabled")
     private fun inWebView(url: String) {
         webView.settings.loadsImagesAutomatically = true
         webView.settings.javaScriptEnabled = true
@@ -82,7 +80,7 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
         webView.settings.displayZoomControls = true
         webView.webViewClient = WebViewClient()
         webView.loadUrl(url)
-    }*/
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -98,12 +96,12 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
         menuInflater.inflate(R.menu.menu, menu)
         return true
     }
-/*
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
         val id = item?.itemId
 
-             if (id == R.id.webView) {
+        if (id == R.id.webView) {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(mUrl)
             startActivity(i)
@@ -111,17 +109,17 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
         }
 
         return true
-    }*/
+    }
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
         val maxScroll: Int = p0!!.totalScrollRange
         val percentage: Float = abs(p1).toFloat() / maxScroll
 
         if (percentage == 1f && isHideToolbarView) {
-         //   date_behavior.visibility = View.GONE
+            date_behavior.visibility = View.GONE
             isHideToolbarView = !isHideToolbarView
         } else if (percentage < 1f && !isHideToolbarView) {
-           // date_behavior.visibility = View.VISIBLE
+            date_behavior.visibility = View.VISIBLE
             isHideToolbarView = !isHideToolbarView
         }
     }

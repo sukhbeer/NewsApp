@@ -93,7 +93,7 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu_news, menu)
         return true
     }
 
@@ -106,9 +106,17 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             i.data = Uri.parse(mUrl)
             startActivity(i)
             return true
+        }else if(id == R.id.share) {
+
+            val i = Intent(Intent.ACTION_SEND)
+            i.type = "text/plan"
+            i.putExtra(Intent.EXTRA_SUBJECT,mSource)
+            val body : String = "$mTitle\n$mUrl\nShare from the News App\n"
+            i.putExtra(Intent.EXTRA_TEXT,body)
+            startActivity(Intent.createChooser(i, "Share with :"))
         }
 
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {

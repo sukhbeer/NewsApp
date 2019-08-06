@@ -31,6 +31,9 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_detail)
 
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         collapsing_toolbar.title = ""
 
@@ -106,13 +109,13 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             i.data = Uri.parse(mUrl)
             startActivity(i)
             return true
-        }else if(id == R.id.share) {
+        } else if (id == R.id.share) {
 
             val i = Intent(Intent.ACTION_SEND)
             i.type = "text/plan"
-            i.putExtra(Intent.EXTRA_SUBJECT,mSource)
-            val body : String = "$mTitle\n$mUrl\nShare from the News App\n"
-            i.putExtra(Intent.EXTRA_TEXT,body)
+            i.putExtra(Intent.EXTRA_SUBJECT, mSource)
+            val body: String = "$mTitle\n$mUrl\nShare from the News App\n"
+            i.putExtra(Intent.EXTRA_TEXT, body)
             startActivity(Intent.createChooser(i, "Share with :"))
         }
 

@@ -93,23 +93,23 @@ class Adapter(private val context: Context, private val list: ArrayList<Article>
         holder.author.text = model.author
         holder.time.text = "\u2022 " + model.publishAt?.let { utils.dateFormat(it) }
         holder.publishedAt.text = utils.dateFormat(model.publishAt.toString())
-         holder.itemView.setOnClickListener {
-             val intent = Intent(context, NewsDetail::class.java)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, NewsDetail::class.java)
 
-             intent.putExtra("url", model.url)
-             intent.putExtra("title", model.title)
-             intent.putExtra("img", model.urlToImage)
-             intent.putExtra("date",model.publishAt)
-             intent.putExtra("source", model.source?.name)
-             intent.putExtra("author", model.author)
+            intent.putExtra("url", model.url)
+            intent.putExtra("title", model.title)
+            intent.putExtra("img", model.urlToImage)
+            intent.putExtra("date", model.publishAt)
+            intent.putExtra("source", model.source?.name)
+            intent.putExtra("author", model.author)
 
-             val pair : Pair<View,String> = Pair(holder.imageView,ViewCompat.getTransitionName(holder.imageView))
-             val optionsCompat : ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                 context as Activity, pair
-             )
+            val pair: Pair<View, String> = Pair(holder.imageView, ViewCompat.getTransitionName(holder.imageView))
+            val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity, pair
+            )
 
-             context.startActivity(intent,optionsCompat.toBundle())
-         }
+            context.startActivity(intent, optionsCompat.toBundle())
+        }
     }
 
     class ViewHolder(view: View, onItemClickListener: OnItemClickListener?) : RecyclerView.ViewHolder(view),

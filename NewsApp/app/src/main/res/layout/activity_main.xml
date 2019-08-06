@@ -45,4 +45,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <include layout="@layout/error_handling"/>
+
 </android.support.design.widget.CoordinatorLayout>

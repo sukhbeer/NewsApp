@@ -1,14 +1,9 @@
 package com.example.newsapp
 
-import android.app.ActivityOptions
 import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
-import android.support.v4.view.ViewCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -18,15 +13,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.support.v7.widget.SearchView
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import com.example.newsapp.Networking.ApiClient
 import com.example.newsapp.Networking.ApiInterface
 import com.example.newsapp.model.Article
 import com.example.newsapp.model.News
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_layout.*
+import kotlinx.android.synthetic.main.error_handling.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +29,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private val apiKey: String = "485ea4701ad8431cb56fe3b4d587c745"
     var articles: ArrayList<Article> = ArrayList()
 
+
     private lateinit var adapter: Adapter
     private lateinit var viewManger: RecyclerView.LayoutManager
 
@@ -43,6 +37,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         swipeRefresh.setOnRefreshListener(this)
         swipeRefresh.setColorSchemeResources(R.color.colorAccent)
@@ -58,6 +54,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun loadJson(keyword: String) {
+
+        errorLayout.visibility = View.GONE
         swipeRefresh.isRefreshing = true
 
         val apiInterface: ApiInterface? = ApiClient.getApiClient?.create(ApiInterface::class.java)
@@ -96,37 +94,22 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     headlines.visibility = View.VISIBLE
                     swipeRefresh.isRefreshing = false
 
+                } else {
+                    headlines.visibility = View.INVISIBLE
+                    swipeRefresh.isRefreshing = false
+
+
+                    val errorCode: String = when {
+                        response.code() == 404 -> "404 not found"
+                        response.code() == 500 -> "500 server broken"
+                        else -> "unknown error"
+                    }
+
+                    showErrorMessage("No Result", "Try Again!\n$errorCode")
                 }
             }
         })
     }
-
-    /*fun initListener() {
-        adapter.setOnItemClickListener(object : Adapter.OnItemClickListener {
-            override fun onItemClick(view: View?, position: Int) {
-                super.onItemClick(view, position)
-
-                val intent = Intent(this@MainActivity,NewsDetail::class.java)
-
-                val article: Article = articles[position]
-                intent.putExtra("url",article.url)
-                intent.putExtra("title",article.title)
-                intent.putExtra("img",article.urlToImage)
-                intent.putExtra("date",article.publishAt)
-                intent.putExtra("source",article.source?.name)
-                intent.putExtra("author",article.author)
-
-
-                val pair: Pair<View,String> = Pair(img,ViewCompat.getTransitionName(img))
-                val optionsCompat: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,pair)
-
-                startActivity(intent,optionsCompat.toBundle())
-
-            }
-        })
-
-    }*/
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
@@ -171,4 +154,19 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             }
         }
     }
+
+    fun showErrorMessage(title: String, message: String) {
+        if (errorLayout.visibility == View.GONE) {
+            errorLayout.visibility = View.VISIBLE
+        }
+
+        errorTitle.text = title
+        errorMessage.text = message
+
+        btnRetry.setOnClickListener {
+            onLoadRefresh("")
+        }
+
+    }
+
 }

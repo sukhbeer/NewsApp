@@ -1,2 +1,2 @@
 # NewsApp
-NewsApp Project For Udacity
+News_AppJava Project For Udacity.

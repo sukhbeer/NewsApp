@@ -37,6 +37,8 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
         collapsing_toolbar.title = ""
 
+        appbar.addOnOffsetChangedListener(this)
+
 
         val i: Intent = intent
         mUrl = i.getStringExtra("url")
@@ -114,7 +116,7 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             val i = Intent(Intent.ACTION_SEND)
             i.type = "text/plan"
             i.putExtra(Intent.EXTRA_SUBJECT, mSource)
-            val body: String = "$mTitle\n$mUrl\nShare from the News App\n"
+            val body = "$mTitle\n$mUrl\nShare from the News App\n"
             i.putExtra(Intent.EXTRA_TEXT, body)
             startActivity(Intent.createChooser(i, "Share with :"))
         }
@@ -124,13 +126,15 @@ class NewsDetail : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
         val maxScroll: Int = p0!!.totalScrollRange
-        val percentage: Float = abs(p1).toFloat() / maxScroll
+        val percentage: Float = abs(p1).toFloat() / maxScroll.toFloat()
 
         if (percentage == 1f && isHideToolbarView) {
             date_behavior.visibility = View.GONE
+            title_appbar.visibility = View.VISIBLE
             isHideToolbarView = !isHideToolbarView
         } else if (percentage < 1f && !isHideToolbarView) {
             date_behavior.visibility = View.VISIBLE
+            title_appbar.visibility = View.GONE
             isHideToolbarView = !isHideToolbarView
         }
     }
